@@ -1,5 +1,6 @@
+import java.util.List;
 
 public interface ISerializer {
-	public void saveData(Object obj);
-	public Object getData();
+	public void saveRecipe(Recipe recipe);
+	public List<Recipe> getData();
 }
