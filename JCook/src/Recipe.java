@@ -4,6 +4,7 @@ import java.util.List;
 public class Recipe {
 	private int id;
 	private String name;
+	private String category;
 	private String description;
 	private List<String> ingredients;
 	private List<String> instructions;
@@ -12,6 +13,14 @@ public class Recipe {
 	
 	public int getId() {
 		return id;
+	}
+	
+	public String getCategory() {
+		return category;
+	}
+	
+	public void setCategory() {
+		this.category = category;
 	}
 	
 	public String getName() {
@@ -33,7 +42,7 @@ public class Recipe {
 		return ingredients;
 	}
 	public void setIngredients(List<String> ingredients) {
-		//
+		this.ingredients = ingredients;
 	}
 	
 	public List<String> getInstructions() {
@@ -48,8 +57,9 @@ public class Recipe {
 		return dateAdded;
 	}
 	
-	
-	
+	public void setDateAdded(Date date) {
+		dateAdded = date;
+	}
 	
 	
 }
