@@ -40,4 +40,8 @@ public interface ISerializer {
 	
 	// Retrieve the names of all of the recipes in the DB of a specific category
 	public List<Integer> getRecipeNamesByCategory(String category);
+	
+	// Retrieve the names of all of the recipes in the DB of a specific category
+	public List<Recipe> getAllRecipe();
+
 }
