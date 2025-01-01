@@ -20,24 +20,73 @@ public class CommandLineUserInterface {
 	@PostConstruct
 	public void initialize() {
 		commandMap.put("quit", this::quitCommand);
+		commandMap.put("help", this::helpCommand);
 	}
 	
 	public void run() {
 		Scanner inputScanner = new Scanner(System.in);
 		String[] currInput;
+		Consumer<String[]> command;
 		
 		running = true;
 		
+		System.out.println("Welcome to the Digital Recipe Book. Enter 'quit' to "
+				+ "exit and 'help' to find out about the available commands.");
+		
 		while (running) {
+			System.out.println(); // Create additional space for readability
+			
 			currInput = inputScanner.nextLine().toLowerCase().split(" ");
 			
-			commandMap.get(currInput[0]).accept(currInput);
+			System.out.println(); // Create additional space for readability
+			
+			command = commandMap.get(currInput[0]);
+			
+			if (command == null) {
+				System.out.println(String.format("The command '%s' is not defined", 
+						currInput[0]));
+			}
+			else {
+				command.accept(currInput);
+			}
 		}
 	}
 	
 	private void quitCommand(String[] input) {
+		if (input.length > 1 && input[1].equals("-h")) {
+			System.out.println("Exits the program."
+					+ "\n\n- 'quit': Exit program");
+			
+			return;
+		}
+		
 		running = false;
 		
 		System.out.println("Exiting the program...");
+	}
+	
+	private void helpCommand(String[] input) {
+		if (input.length > 1 && input[1].equals("-h")) {
+			System.out.println("Provides information on the available commands."
+					+ "\n\n- 'help': provides a list of the available commands"
+					+ "\n\n- 'help {command}': provides additional information on the "
+					+ "command.");
+			
+			return;
+		}
+		
+		if (input.length > 1 && commandMap.containsKey(input[1])) {
+			commandMap.get(input[1]).accept(new String[] {input[1], "-h"});
+		}
+		else {
+			System.out.println("Available commands: ");
+			
+			for (String s : commandMap.keySet()) {
+				System.out.print(s + "  ");
+			}
+			
+			System.out.println("\n\nEnter 'help {command}' or '{command} -h' for "
+					+ "additional info on a specific command.");
+		}
 	}
 }
