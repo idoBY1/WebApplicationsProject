@@ -40,26 +40,23 @@ public class Service {
 	}
 	
 	public List<Recipe> getAllRecipes() {
-		List<Integer> recipes_ids = serializer.getRecipeIds();
-		List<Recipe> recipes = new ArrayList<>(recipes_ids.size());
-		
-		for(int id : recipes_ids)
-			recipes.add(serializer.getRecipeById(id));
-
-		return recipes;
+		return serializer.getAllRecipe();
 	}
 	
 	public List<Recipe> getAllRecipesFromCategory(String category) {
-		return null; // TODO: implement
-		//return serializer.getRecipesByCategory(category);
+		return serializer.getRecipesByCategory(category);
 	}
 	
-	public void deleteRecipe(String name) {
-		// TODO: implement
+	public void deleteRecipe(String name) throws InvalidRecipeException {
+		if (serializer.recipeExistsByName(name)) 
+			serializer.deleteRecipeByName(name);
+		else
+			throw new InvalidRecipeException("Recipe doesnt exist!");
 	}
 	
-	public void editRecipe(int recipeToChangeID, Recipe newInfo) {
-		// TODO: implement
+	// TODO: WHat are we going to do about this?
+	public void editRecipe(Recipe newInfo) throws InvalidRecipeException {
+		return;
 	}
 	
 	
