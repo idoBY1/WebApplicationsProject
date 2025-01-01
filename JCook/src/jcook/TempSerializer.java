@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TempSerializer implements ISerializer {
-
 	@Override
 	public boolean recipeExistsByName(String name) {
 		// TODO Auto-generated method stub
