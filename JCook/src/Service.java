@@ -20,7 +20,7 @@ public class Service {
 		if (!errorMsg.equals(""))
 			throw new InvalidRecipeException(errorMsg);
 		
-		serializer.saveRecipe(recipe);
+		serializer.saveRecipe(recipe); // TODO: check if recipe already exists
 		return true;
 	}
 	
@@ -48,13 +48,25 @@ public class Service {
 		return serializer.getRecipeByName(name);
 	}
 	
+	public List<String> getAllRecipeNames() {
+		return null; // TODO: implement
+	}
+	
 	public List<Recipe> getAllRecipes() {
-		return null;
+		return null; // TODO: implement
 		//return serializer.getAllRecipes();
 	}
 	
 	public List<Recipe> getAllRecipesFromCategory(String category) {
-		return null;
+		return null; // TODO: implement
 		//return serializer.getRecipesByCategory(category);
+	}
+	
+	public void deleteRecipe(String name) {
+		// TODO: implement
+	}
+	
+	public void editRecipe(Recipe editedRecipe) {
+		// TODO: implement
 	}
 }

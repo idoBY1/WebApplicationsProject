@@ -19,6 +19,11 @@ public interface ISerializer {
 	// and false if not (if id doesn't exist, do nothing and return false)
 	public boolean deleteRecipeById(int id);
 	
+	// Receives a recipe and changes the recipe in the DB with the same id
+	// to be equal to the received recipe. Return true if changed successfully 
+	// and false if not (if id doesn't exist in the DB, do nothing and return false)
+	public boolean editRecipe(Recipe changedRecipe);
+	
 	// Retrieve a recipe from the DB. Return null if not found
 	public Recipe getRecipeByName(String name);
 	
