@@ -1,7 +1,7 @@
 import java.util.Date;
 import java.util.List;
 
-public class Recipe {
+public class Recipe implements Comparable<Recipe> {
 	private int id;
 	private String name;
 	private String category;
@@ -69,6 +69,30 @@ public class Recipe {
 		this.dateLatestChange = dateLatestChange;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Recipe))
+			return false;
+		
+		Recipe other = (Recipe)obj;
+		
+		// Doesn't check if the ids and dates are equal because they are not relevant 
+		// to the contents of the recipe
+		return name.equals(other.name) && category.equals(other.category)
+				&& description.equals(other.description) && ingredients.equals(other.ingredients)
+				&& instructions.equals(other.instructions);
+	}
 	
-	
+	@Override
+	public int compareTo(Recipe other) {
+		// Compare the recipes by name
+		return name.compareTo(other.name);
+	}
+
+	@Override
+	public String toString() {
+		return "Recipe [id=" + id + ", name=" + name + ", category=" + category + ", description=" + description
+				+ ", ingredients=" + ingredients + ", instructions=" + instructions + ", dateAdded=" + dateAdded
+				+ ", dateLatestChange=" + dateLatestChange + "]";
+	}
 }
