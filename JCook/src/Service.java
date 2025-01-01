@@ -1,12 +1,13 @@
 import java.util.Date;
 import java.util.List;
 
-public class IService {
-	private ISerializer serializer;
-	
-	public IService(ISerializer serializer) {
-		this.serializer = serializer;
-	}
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Service {
+	@Autowired
+	private ISerializer serializer;	
 	
 	public boolean saveRecipe(Recipe recipe) throws InvalidRecipeException {
 		String errorMsg = "";

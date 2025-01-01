@@ -6,4 +6,5 @@ public interface ISerializer {
 	public void saveRecipe(Recipe recipe);
 	public Recipe getRecipeByName(String name);
 	public Recipe getRecipeById(int id);
+	public List<Integer> getRecipeIds();
 }
