@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.omg.PortableServer.ThreadPolicyOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,17 +12,8 @@ public class Service {
 	private ISerializer serializer;	
 	
 	public boolean saveRecipe(Recipe recipe) throws InvalidRecipeException {
-		String errorMsg = "";
-		if (!isValidName(recipe.getName())) errorMsg += "Invalid Name!\n";
-		if (!isValidCategory(recipe.getCategory())) errorMsg += "Invalid Category!\n";
-		if (!isValidDescription(recipe.getDescription())) errorMsg += "Invalid Description!\n";
-		if (!isValidIngredients(recipe.getIngredients())) errorMsg += "Invalid Ingredients!\n";
-		if (!isValidInstructions(recipe.getInstructions())) errorMsg += "Invalid Instructions!\n";
+		if (!validate(recipe)) return false; // also throws InvalidRecipeException
 		
-		if (!errorMsg.equals(""))
-			throw new InvalidRecipeException(errorMsg);
-		
-		// Might be changed later
 		if (serializer.recipeExistsByName(recipe.getName()))  
 			throw new InvalidRecipeException("Recipe already exists!\n");
 		
@@ -54,13 +46,42 @@ public class Service {
 			throw new InvalidRecipeException("Recipe doesnt exist!");
 	}
 	
-	// TODO: WHat are we going to do about this?
-	public void editRecipe(Recipe newInfo) throws InvalidRecipeException {
-		return;
+	public boolean editRecipe(Recipe newInfo) throws InvalidRecipeException {
+		int id = newInfo.getId();
+		
+		if (!validate(newInfo)) return false; // also throws InvalidRecipeException
+		
+		Recipe oldInfo = serializer.getRecipeById(id);
+		
+		if (!serializer.recipeExistsById(id))
+			throw new InvalidRecipeException("Recipe doesnt exist to change!");
+		
+		if (!newInfo.getName().equals(oldInfo.getName()))
+			if (serializer.recipeExistsByName(newInfo.getName()))
+				throw new InvalidRecipeException("New name already exists for a differenct recipe!");
+		
+		serializer.editRecipe(newInfo);
+		
+		return true;
 	}
 	
 	
 	// VALIDATIONS //
+	
+	public static boolean validate(Recipe recipe) throws InvalidRecipeException {
+		String errorMsg = "";
+		if (!isValidName(recipe.getName())) errorMsg += "Invalid Name!\n";
+		if (!isValidCategory(recipe.getCategory())) errorMsg += "Invalid Category!\n";
+		if (!isValidDescription(recipe.getDescription())) errorMsg += "Invalid Description!\n";
+		if (!isValidIngredients(recipe.getIngredients())) errorMsg += "Invalid Ingredients!\n";
+		if (!isValidInstructions(recipe.getInstructions())) errorMsg += "Invalid Instructions!\n";
+		
+		if (!errorMsg.equals(""))
+			throw new InvalidRecipeException(errorMsg);
+		
+		return true;
+	}
+	
 	public static boolean isValidName(String name) {
 		return name != null && !name.trim().isEmpty();
 	}
