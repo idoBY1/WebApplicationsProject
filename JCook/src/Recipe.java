@@ -9,7 +9,7 @@ public class Recipe {
 	private List<String> ingredients;
 	private List<String> instructions;
 	private Date dateAdded;
-	
+	private Date dateLatestChange;
 	
 	public int getId() {
 		return id;
@@ -60,6 +60,15 @@ public class Recipe {
 	public void setDateAdded(Date date) {
 		dateAdded = date;
 	}
+
+	public Date getDateLatestChange() {
+		return dateLatestChange;
+	}
+
+	public void setDateLatestChange(Date dateLatestChange) {
+		this.dateLatestChange = dateLatestChange;
+	}
+	
 	
 	
 }
