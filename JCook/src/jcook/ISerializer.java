@@ -1,3 +1,4 @@
+package jcook;
 import java.util.List;
 
 public interface ISerializer {
