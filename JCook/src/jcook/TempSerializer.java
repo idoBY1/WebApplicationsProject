@@ -6,22 +6,36 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TempSerializer implements ISerializer {
+	private List<Recipe> recipes;
+	private int currId = 1;
+	
 	@Override
 	public boolean recipeExistsByName(String name) {
-		// TODO Auto-generated method stub
+		for (Recipe r : recipes)
+		{
+			if (r.getName().equals(name))
+				return true;
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean recipeExistsById(int id) {
-		// TODO Auto-generated method stub
+		for (Recipe r : recipes)
+		{
+			if (r.getId() == id)
+				return true;
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean saveRecipe(Recipe recipe) {
-		// TODO Auto-generated method stub
-		return false;
+		recipes.add(recipe);
+		
+		return true;
 	}
 
 	@Override
