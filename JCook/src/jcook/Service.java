@@ -27,6 +27,10 @@ public class Service {
 		return serializer.getRecipeByName(name);
 	}
 	
+	public Recipe getRecipe(int id) {
+		return serializer.getRecipeById(id);
+	}
+	
 	// In my opinion no need for this since we have get all recipes but okay
 	public List<String> getAllRecipeNames() {
 		return serializer.getRecipeNames();

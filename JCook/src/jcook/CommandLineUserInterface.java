@@ -29,6 +29,7 @@ public class CommandLineUserInterface {
 		commandMap.put("quit", this::quitCommand);
 		commandMap.put("help", this::helpCommand);
 		commandMap.put("add", this::addRecipeCommand);
+		commandMap.put("read", this::readRecipeCommand);
 	}
 	
 	@PreDestroy
@@ -155,10 +156,38 @@ public class CommandLineUserInterface {
 				return;
 			}
 			
+			try {
+				int id = Integer.parseInt(input[2]);
+				
+				Recipe r = service.getRecipe(id);
+				
+				if (r != null)
+					printRecipe(r);
+				else
+					System.out.println("Did not found requested recipe");
+			}
+			catch (NumberFormatException e) {
+				System.out.println("Invalid arguments! expected a number after '-i'");
+			}
+		}
+		else if (input[1].equals("-a")) {
+			List<Recipe> recipes = service.getAllRecipes();
 			
+			if (recipes.isEmpty())
+				System.out.println("No recipes saved");
+			else {
+				for (Recipe r : recipes) {
+					printRecipe(r);
+				}
+			}
 		}
 		else {
+			Recipe r = service.getRecipe(input[1]);
 			
+			if (r != null)
+				printRecipe(r);
+			else
+				System.out.println("Did not found requested recipe");
 		}
 	}
 	
