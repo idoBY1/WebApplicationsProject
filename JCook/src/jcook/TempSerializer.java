@@ -1,5 +1,6 @@
 package jcook;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -33,6 +34,10 @@ public class TempSerializer implements ISerializer {
 
 	@Override
 	public boolean saveRecipe(Recipe recipe) {
+		if (recipeExistsByName(recipe.getName()))
+			return false;
+		
+		recipe.setId(currId++);
 		recipes.add(recipe);
 		
 		return true;
@@ -40,62 +45,111 @@ public class TempSerializer implements ISerializer {
 
 	@Override
 	public boolean deleteRecipeByName(String name) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < recipes.size(); i++) {
+			if (recipes.get(i).getName().equals(name)) {
+				recipes.remove(i);
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean deleteRecipeById(int id) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < recipes.size(); i++) {
+			if (recipes.get(i).getId() == id) {
+				recipes.remove(i);
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean editRecipe(Recipe changedRecipe) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < recipes.size(); i++) {
+			if (recipes.get(i).getId() == changedRecipe.getId()) {
+				recipes.set(i, changedRecipe);
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
 	@Override
 	public Recipe getRecipeByName(String name) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < recipes.size(); i++) {
+			if (recipes.get(i).getName().equals(name)) {
+				return recipes.get(i);
+			}
+		}
+		
 		return null;
 	}
 
 	@Override
 	public Recipe getRecipeById(int id) {
-		// TODO Auto-generated method stub
+		for (int i = 0; i < recipes.size(); i++) {
+			if (recipes.get(i).getId() == changedRecipe.getId()) {
+				return recipes.get(i);
+			}
+		}
+		
 		return null;
 	}
 
 	@Override
 	public List<Integer> getRecipeIds() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Integer> idList = new ArrayList<>(recipes.size());
+		
+		for (Recipe r : recipes) {
+			idList.add(r.getId());
+		}
+		
+		return idList;
 	}
 
 	@Override
 	public List<String> getRecipeNames() {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> nameList = new ArrayList<>(recipes.size());
+		
+		for (Recipe r : recipes) {
+			nameList.add(r.getName());
+		}
+		
+		return nameList;
 	}
 
 	@Override
 	public List<Integer> getRecipesIdByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Integer> idList = new ArrayList<>(recipes.size());
+		
+		for (Recipe r : recipes) {
+			if (r.getCategory().equals(category))
+				idList.add(r.getId());
+		}
+		
+		return idList;
 	}
 
 	@Override
 	public List<Recipe> getAllRecipe() {
-		// TODO Auto-generated method stub
-		return null;
+		return recipes;
 	}
 
 	@Override
 	public List<Recipe> getRecipesByCategory(String category) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Recipe> rList = new ArrayList<>(recipes.size());
+		
+		for (Recipe r : recipes) {
+			if (r.getCategory().equals(category))
+				rList.add(r);
+		}
+		
+		return rList;
 	}
 
 }
