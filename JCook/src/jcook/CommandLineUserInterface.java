@@ -1,5 +1,6 @@
 package jcook;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -172,6 +173,8 @@ public class CommandLineUserInterface {
 		}
 		else if (input[1].equals("-a")) {
 			List<Recipe> recipes = service.getAllRecipes();
+			
+			Collections.sort(recipes);
 			
 			if (recipes.isEmpty())
 				System.out.println("No recipes saved");
