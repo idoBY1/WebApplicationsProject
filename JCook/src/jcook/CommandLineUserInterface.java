@@ -31,6 +31,7 @@ public class CommandLineUserInterface {
 		commandMap.put("help", this::helpCommand);
 		commandMap.put("add", this::addRecipeCommand);
 		commandMap.put("read", this::readRecipeCommand);
+		commandMap.put("del", this::deleteRecipeCommand);
 	}
 	
 	@PreDestroy
@@ -191,6 +192,28 @@ public class CommandLineUserInterface {
 				printRecipe(r);
 			else
 				System.out.println("Did not found requested recipe");
+		}
+	}
+	
+	private void deleteRecipeCommand(String[] input) {
+		if (input.length < 2) {
+			System.out.println("Invalid arguments! expected a recipe name");
+		}
+		
+		if (input.length > 1 && input[1].equals("-h")) {
+			System.out.println("Deletes a recipe from the recipe book."
+				+ "\n\n- '" + input[0] + " {recipeName}': delete the recipe with the specified name");
+			
+			return;
+		}
+		
+		try {
+			service.deleteRecipe(input[1]);
+			System.out.println("Deleted recipe '" + input[1] + "' successfully");
+		}
+		catch (InvalidRecipeException e) {
+			System.out.println("Failed to delete recipe. Error: ");
+			System.out.println(e.getMessage());
 		}
 	}
 	
