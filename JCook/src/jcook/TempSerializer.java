@@ -3,12 +3,19 @@ package jcook;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class TempSerializer implements ISerializer {
 	private List<Recipe> recipes;
 	private int currId = 1;
+	
+	@PostConstruct
+	public void Initialize() {
+		recipes = new ArrayList<>();
+	}
 	
 	@Override
 	public boolean recipeExistsByName(String name) {
@@ -93,7 +100,7 @@ public class TempSerializer implements ISerializer {
 	@Override
 	public Recipe getRecipeById(int id) {
 		for (int i = 0; i < recipes.size(); i++) {
-			if (recipes.get(i).getId() == changedRecipe.getId()) {
+			if (recipes.get(i).getId() == id) {
 				return recipes.get(i);
 			}
 		}

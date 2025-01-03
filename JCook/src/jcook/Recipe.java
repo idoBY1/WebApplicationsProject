@@ -20,7 +20,7 @@ public class Recipe implements Comparable<Recipe> {
 		this.id = id;
 	}
 	
-	public String getCategory() {
+	public String getCategory() {	
 		return category;
 	}
 	
