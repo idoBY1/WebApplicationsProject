@@ -31,11 +31,6 @@ public class Service {
 		return serializer.getRecipeById(id);
 	}
 	
-	// In my opinion no need for this since we have get all recipes but okay
-	public List<String> getAllRecipeNames() {
-		return serializer.getRecipeNames();
-	}
-	
 	public List<Recipe> getAllRecipes() {
 		return serializer.getAllRecipe();
 	}
@@ -56,10 +51,10 @@ public class Service {
 		
 		if (!validate(newInfo)) return false; // also throws InvalidRecipeException
 		
-		Recipe oldInfo = serializer.getRecipeById(id);
-		
 		if (!serializer.recipeExistsById(id))
 			throw new InvalidRecipeException("Recipe doesnt exist to change!");
+		
+		Recipe oldInfo = serializer.getRecipeById(id);
 		
 		if (!newInfo.getName().equals(oldInfo.getName()))
 			if (serializer.recipeExistsByName(newInfo.getName()))

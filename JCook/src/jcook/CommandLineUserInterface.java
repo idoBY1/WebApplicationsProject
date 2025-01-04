@@ -3,9 +3,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
@@ -32,6 +34,7 @@ public class CommandLineUserInterface {
 		commandMap.put("add", this::addRecipeCommand);
 		commandMap.put("read", this::readRecipeCommand);
 		commandMap.put("del", this::deleteRecipeCommand);
+		commandMap.put("edit", this::editRecipeCommand);
 	}
 	
 	@PreDestroy
@@ -200,7 +203,7 @@ public class CommandLineUserInterface {
 			System.out.println("Invalid arguments! expected a recipe name");
 		}
 		
-		if (input.length > 1 && input[1].equals("-h")) {
+		if (input[1].equals("-h")) {
 			System.out.println("Deletes a recipe from the recipe book."
 				+ "\n\n- '" + input[0] + " {recipeName}': delete the recipe with the specified name");
 			
@@ -213,6 +216,90 @@ public class CommandLineUserInterface {
 		}
 		catch (InvalidRecipeException e) {
 			System.out.println("Failed to delete recipe. Error: ");
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	private void editRecipeCommand(String[] input) {
+		if (input.length < 2) {
+			System.out.println("Not enough arguments!");
+			return;
+		}
+		
+		if (input[1].equals("-h")) {
+			System.out.println("Edit an existing recipe."
+				+ "\n\n- '" + input[0] + " {recipeName}': edit the recipe with the name given"
+				+ "\n\nAdd additional flags after the recipe name to specify which fields would "
+				+ "you like to change.\nAvailable flags:"
+				+ "\n\n'-n': edit name\n\n'-c': edit category\n\n'-d': edit description"
+				+ "\n\n'-g': edit ingredients\n\n'-s': edit instructions\n\n"
+				+ "You can add any combination of these flags to the command.");
+			
+			return;
+		}
+		
+		Recipe r = service.getRecipe(input[1]);
+		
+		if (r == null) {
+			System.out.println("Recipe doesn't exist!");
+			return;
+		}
+		
+		Set<String> flags = new HashSet<>();
+		
+		for (int i = 2; i < input.length; i++) {
+			flags.add(input[i]);
+		}
+		
+		if (flags.contains("-n")) {
+			System.out.println("Current recipe name: " + r.getName());
+			System.out.println("New name: ");
+			
+			String newName = inputScanner.nextLine();
+			
+			if (service.getRecipe(newName) != null) {
+				System.out.println("New name already exists for a differenct recipe!");
+			}
+			
+			r.setName(newName);
+		}
+		
+		if (flags.contains("-c")) {
+			System.out.println("Current category: " + r.getCategory());
+			inputCategory(r, "New category: ");
+		}
+		
+		if (flags.contains("-d")) {
+			System.out.println("Current description: " + r.getDescription() + "\n");
+			inputDescription(r, "New description:");
+		}
+		
+		if (flags.contains("-g")) {
+			System.out.println("Current ingredients: \n");
+			
+			for (String s : r.getIngredients()) {
+				System.out.println("- " + s);
+			}
+			
+			inputIngredients(r, "\nNew ingredients:");
+		}
+		
+		if (flags.contains("-s")) {
+			System.out.println("Current instructions: \n");
+			
+			for (int i = 0; i < r.getInstructions().size(); i++) {
+				System.out.println((i + 1) + ". " + r.getInstructions().get(i));
+			}
+			
+			inputInstructions(r, "\nNew instructions:");
+		}
+		
+		try {
+			service.editRecipe(r);
+			System.out.println("Updated recipe");
+		}
+		catch (InvalidRecipeException e) {
+			System.out.println("Failed to edit recipe. \nError: ");
 			System.out.println(e.getMessage());
 		}
 	}
