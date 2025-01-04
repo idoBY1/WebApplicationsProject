@@ -26,10 +26,10 @@ public interface ISerializer {
 	public boolean editRecipe(Recipe changedRecipe);
 	
 	// Retrieve a recipe from the DB. Return null if not found
-	public Recipe getRecipeByName(String name);
+	public Recipe getRecipeByName(String name) throws CloneNotSupportedException;
 	
 	// Retrieve a recipe from the DB. Return null if not found
-	public Recipe getRecipeById(int id);
+	public Recipe getRecipeById(int id) throws CloneNotSupportedException;
 	
 	// Return in a list all of the ids of the recipes currently stored 
 	// in the DB (Return an empty list if the DB doesn't contain any recipe)
@@ -42,10 +42,10 @@ public interface ISerializer {
 	// Retrieve the names of all of the recipes in the DB of a specific category
 	public List<Integer> getRecipesIdByCategory(String category);
 	
-	// Retrieve the names of all of the recipes in the DB of a specific category
-	public List<Recipe> getAllRecipe();
+	// Retrieve all of the recipes in the DB
+	public List<Recipe> getAllRecipe() throws CloneNotSupportedException;
 	
-	// Retrieve the names of all of the recipes in the DB of a specific category
-	public List<Recipe> getRecipesByCategory(String category);
+	// Retrieve all of the recipes in the DB of a specific category
+	public List<Recipe> getRecipesByCategory(String category) throws CloneNotSupportedException;
 
 }

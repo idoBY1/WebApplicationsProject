@@ -1,8 +1,10 @@
 package jcook;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Recipe implements Comparable<Recipe> {
+public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	private int id;
 	private String name;
 	private String category;
@@ -99,5 +101,22 @@ public class Recipe implements Comparable<Recipe> {
 		return "Recipe [id=" + id + ", name=" + name + ", category=" + category + ", description=" + description
 				+ ", ingredients=" + ingredients + ", instructions=" + instructions + ", dateAdded=" + dateAdded
 				+ ", dateLatestChange=" + dateLatestChange + "]";
+	}
+	
+	@Override
+	public Recipe clone() throws CloneNotSupportedException {
+		 Recipe clonedRecipe = (Recipe) super.clone();
+		 clonedRecipe.dateAdded = (Date) dateAdded.clone();
+		 clonedRecipe.dateLatestChange = (Date) dateLatestChange.clone();
+		 
+		  if (ingredients != null) {
+		        clonedRecipe.ingredients = new ArrayList<>(ingredients);
+		  }
+		  if (instructions != null) {
+		        clonedRecipe.instructions = new ArrayList<>(instructions);
+		  }
+		 
+		 
+		return clonedRecipe;
 	}
 }
