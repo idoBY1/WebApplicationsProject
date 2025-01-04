@@ -24,7 +24,7 @@ public class FileSerializer implements ISerializer {
 			FileInputStream fileIn = new FileInputStream("recipes.ser");
 			ObjectInputStream in = new ObjectInputStream(fileIn);
 			recipes = (List<Recipe>) in.readObject();
-			System.out.println("Deserialized Object: " + recipes);
+//			System.out.println("Deserialized Object: " + recipes);
 			
 			fileIn.close();
 			in.close();
@@ -40,7 +40,7 @@ public class FileSerializer implements ISerializer {
 			FileOutputStream fileOut = new FileOutputStream("recipes.ser");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			out.writeObject(recipes);
-			System.out.println("Serialized data is saved in recipes.ser");
+//			System.out.println("Serialized data is saved in recipes.ser");
 			
 			fileOut.close();
 			out.close();
@@ -49,7 +49,6 @@ public class FileSerializer implements ISerializer {
 			ioe.printStackTrace();
 		}
 	}
-
 
 	@Override
 	public boolean recipeExistsByName(String name) {
@@ -74,6 +73,11 @@ public class FileSerializer implements ISerializer {
 	@Override
 	public boolean saveRecipe(Recipe recipe) {
 		if(!recipeExistsByName(recipe.getName())) {
+			if (recipes.isEmpty())
+				recipe.setId(1);
+			else
+				recipe.setId(recipes.get(recipes.size() - 1).getId() + 1);
+			
 			recipes.add(recipe);
 			return true;
 		}
@@ -121,22 +125,22 @@ public class FileSerializer implements ISerializer {
 	}
 
 	@Override
-	public Recipe getRecipeByName(String name) throws CloneNotSupportedException {
+	public Recipe getRecipeByName(String name) {
 		
 		for (Recipe recipe : recipes) {
 			if (recipe.getName().equals(name)) {
-				return recipe.clone();
+				return recipe;
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public Recipe getRecipeById(int id) throws CloneNotSupportedException {
+	public Recipe getRecipeById(int id) {
 		
 		for (Recipe recipe : recipes) {
 			if (recipe.getId() == id) {
-				return recipe.clone();
+				return recipe;
 			}
 		}
 		return null;
@@ -171,20 +175,20 @@ public class FileSerializer implements ISerializer {
 	}
 
 	@Override
-	public List<Recipe> getAllRecipe() throws CloneNotSupportedException {
+	public List<Recipe> getAllRecipe() {
 		ArrayList<Recipe> tempRecipes = new ArrayList<>();
 		for (Recipe recipe : recipes) {
-			tempRecipes.add(recipe.clone());
+			tempRecipes.add(recipe);
 		}
 		return tempRecipes;
 	}
 
 	@Override
-	public List<Recipe> getRecipesByCategory(String category) throws CloneNotSupportedException {
+	public List<Recipe> getRecipesByCategory(String category) {
 		ArrayList<Recipe> tempRecipes = new ArrayList<>();
 		for (Recipe recipe : recipes) {
 			if (recipe.getCategory().equals(category))
-				tempRecipes.add(recipe.clone());
+				tempRecipes.add(recipe);
 		}
 		return tempRecipes;
 	}

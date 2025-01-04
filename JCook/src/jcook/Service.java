@@ -21,10 +21,18 @@ public class Service {
 		serializer.saveRecipe(recipe);
 		return true;
 	}
-
 	
 	public Recipe getRecipe(String name) {
 		return serializer.getRecipeByName(name);
+	}
+	
+	public Recipe getRecipeClone(String name) throws CloneNotSupportedException {
+		Recipe r = serializer.getRecipeByName(name);
+		
+		if (r == null)
+			return null;
+		
+		return r.clone();
 	}
 	
 	public Recipe getRecipe(int id) {

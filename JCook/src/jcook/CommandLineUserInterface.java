@@ -238,7 +238,15 @@ public class CommandLineUserInterface {
 			return;
 		}
 		
-		Recipe r = service.getRecipe(input[1]);
+		Recipe r = null;
+		
+		try {
+			r = service.getRecipeClone(input[1]);
+		}
+		catch (CloneNotSupportedException e) {
+			System.out.println("Failed to clone recipe to edit");
+			return;
+		}
 		
 		if (r == null) {
 			System.out.println("Recipe doesn't exist!");
@@ -256,10 +264,6 @@ public class CommandLineUserInterface {
 			System.out.println("New name: ");
 			
 			String newName = inputScanner.nextLine();
-			
-			if (service.getRecipe(newName) != null) {
-				System.out.println("New name already exists for a differenct recipe!");
-			}
 			
 			r.setName(newName);
 		}
