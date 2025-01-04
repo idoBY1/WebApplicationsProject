@@ -5,12 +5,27 @@ import java.util.List;
 
 import org.omg.PortableServer.ThreadPolicyOperations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
+@PropertySource("classpath:params.properties")
 public class Service {
 	@Autowired
 	private ISerializer serializer;	
+	
+	@Value("${maxNameLen}")
+	private int maxNameLength;
+	
+	@Value("${maxDescLen}")
+	private int maxDescriptionLength;
+	
+	@Value("${maxIngredientsLen}")
+	private int maxIngredients;
+	
+	@Value("${maxInstructionsLen}")
+	private int maxInstructions;
 	
 	public boolean saveRecipe(Recipe recipe) throws InvalidRecipeException {
 		if (!validate(recipe)) return false; // also throws InvalidRecipeException
@@ -76,8 +91,9 @@ public class Service {
 	
 	// VALIDATIONS //
 	
-	public static boolean validate(Recipe recipe) throws InvalidRecipeException {
+	public boolean validate(Recipe recipe) throws InvalidRecipeException {
 		String errorMsg = "";
+		
 		if (!isValidName(recipe.getName())) errorMsg += "Invalid Name!\n";
 		if (!isValidCategory(recipe.getCategory())) errorMsg += "Invalid Category!\n";
 		if (!isValidDescription(recipe.getDescription())) errorMsg += "Invalid Description!\n";
@@ -90,23 +106,23 @@ public class Service {
 		return true;
 	}
 	
-	public static boolean isValidName(String name) {
-		return name != null && !name.trim().isEmpty();
+	public boolean isValidName(String name) {
+		return name != null && !name.trim().isEmpty() && name.length() <= maxNameLength;
 	}
 	
-	public static boolean isValidCategory(String category) {
+	public boolean isValidCategory(String category) {
 		return category != null && !category.trim().isEmpty();
 	}
 	
-	public static boolean isValidDescription(String desc) {
-		return desc != null && !desc.trim().isEmpty();
+	public boolean isValidDescription(String desc) {
+		return desc != null && !desc.trim().isEmpty() && desc.length() <= maxDescriptionLength;
 	}
 	
-	public static boolean isValidIngredients(List<String> ingredients) {
-		return ingredients != null && !ingredients.isEmpty();
+	public boolean isValidIngredients(List<String> ingredients) {
+		return ingredients != null && !ingredients.isEmpty() && ingredients.size() <= maxIngredients;
 	}
 	
-	public static boolean isValidInstructions(List<String> instructions) {
-		return instructions != null && !instructions.isEmpty();
+	public boolean isValidInstructions(List<String> instructions) {
+		return instructions != null && !instructions.isEmpty() && instructions.size() <= maxInstructions;
 	}
 }

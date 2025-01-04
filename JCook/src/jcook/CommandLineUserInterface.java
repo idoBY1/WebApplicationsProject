@@ -189,7 +189,13 @@ public class CommandLineUserInterface {
 			}
 		}
 		else {
-			Recipe r = service.getRecipe(input[1]);
+			String recipeName = input[1];
+			
+			for (int i = 2; i < input.length; i++) {
+				recipeName += " " + input[i];
+			}
+			
+			Recipe r = service.getRecipe(recipeName);
 			
 			if (r != null)
 				printRecipe(r);
@@ -201,6 +207,7 @@ public class CommandLineUserInterface {
 	private void deleteRecipeCommand(String[] input) {
 		if (input.length < 2) {
 			System.out.println("Invalid arguments! expected a recipe name");
+			return;
 		}
 		
 		if (input[1].equals("-h")) {
@@ -210,9 +217,15 @@ public class CommandLineUserInterface {
 			return;
 		}
 		
+		String recipeName = input[1];
+		
+		for (int i = 2; i < input.length; i++) {
+			recipeName += " " + input[i];
+		}
+		
 		try {
-			service.deleteRecipe(input[1]);
-			System.out.println("Deleted recipe '" + input[1] + "' successfully");
+			service.deleteRecipe(recipeName);
+			System.out.println("Deleted recipe successfully");
 		}
 		catch (InvalidRecipeException e) {
 			System.out.println("Failed to delete recipe. Error: ");
@@ -228,8 +241,8 @@ public class CommandLineUserInterface {
 		
 		if (input[1].equals("-h")) {
 			System.out.println("Edit an existing recipe."
-				+ "\n\n- '" + input[0] + " {recipeName}': edit the recipe with the name given"
-				+ "\n\nAdd additional flags after the recipe name to specify which fields would "
+				+ "\n\n- '" + input[0] + " {recipeName} | {flags}': edit the recipe with the name given"
+				+ "\n\nAdd flags after the '|' seperator to specify which fields would "
 				+ "you like to change.\nAvailable flags:"
 				+ "\n\n'-n': edit name\n\n'-c': edit category\n\n'-d': edit description"
 				+ "\n\n'-g': edit ingredients\n\n'-s': edit instructions\n\n"
@@ -238,10 +251,22 @@ public class CommandLineUserInterface {
 			return;
 		}
 		
+		String recipeName = input[1];
+		int flagStartIndex = -1;
+		
+		for (int i = 2; i < input.length; i++) {
+			if (!input[i].equals("|"))
+				recipeName += " " + input[i];
+			else {
+				flagStartIndex = i + 1;
+				break;
+			}
+		}
+		
 		Recipe r = null;
 		
 		try {
-			r = service.getRecipeClone(input[1]);
+			r = service.getRecipeClone(recipeName);
 		}
 		catch (CloneNotSupportedException e) {
 			System.out.println("Failed to clone recipe to edit");
@@ -255,7 +280,12 @@ public class CommandLineUserInterface {
 		
 		Set<String> flags = new HashSet<>();
 		
-		for (int i = 2; i < input.length; i++) {
+		if (flagStartIndex == -1) {
+			System.out.println("Missing '|' seperator (to seperate the recipe name from the command flags)");
+			return;
+		}
+		
+		for (int i = flagStartIndex; i < input.length; i++) {
 			flags.add(input[i]);
 		}
 		
