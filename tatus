@@ -1,0 +1,48 @@
+[33mcommit ceeb0f4a9c384da5dfc35aec5878d72720d38541[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mUI[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: idoBY1 <94797559+idoBY1@users.noreply.github.com>
+Date:   Sat Dec 28 11:52:45 2024 +0200
+
+    Update ISerializer.java
+
+[33mcommit a9393f31a3d258543856998171a80518e02db7b0[m
+Author: idoBY1 <94797559+idoBY1@users.noreply.github.com>
+Date:   Mon Dec 23 13:14:39 2024 +0200
+
+    Update ISerializer.java
+
+[33mcommit f5afc93b03bcbfa74bd820e99505616e3e13f750[m
+Merge: b34deb5 b422698
+Author: wasd@gmail.com <wasd@gmail.com>
+Date:   Mon Dec 23 13:07:16 2024 +0200
+
+    Merge branch 'main' of https://github.com/idoBY1/WebApplicationsProject
+
+[33mcommit b34deb55d506bc6dbb1b0f258c754f43319f93d2[m
+Author: wasd@gmail.com <wasd@gmail.com>
+Date:   Mon Dec 23 13:06:56 2024 +0200
+
+    Blah Blah
+
+[33mcommit b422698ade756c372b96331000b1974ed2e74011[m
+Author: idoBY1 <94797559+idoBY1@users.noreply.github.com>
+Date:   Mon Dec 23 12:52:49 2024 +0200
+
+    Update ISerializer.java
+
+[33mcommit a99bc88c3178929170111fa9019ba09e09e09db2[m
+Author: wasd@gmail.com <wasd@gmail.com>
+Date:   Mon Dec 23 12:51:51 2024 +0200
+
+    Test
+
+[33mcommit ae99c4128613bcb1b54e706cad80ba0f38ae4b5d[m
+Author: idoBY1 <94797559+idoBY1@users.noreply.github.com>
+Date:   Mon Dec 23 12:46:05 2024 +0200
+
+    base version
+
+[33mcommit 1c975ddb163db5b7b1c07fcae1dc86d5ecf2a617[m
+Author: idoBY1 <94797559+idoBY1@users.noreply.github.com>
+Date:   Mon Dec 23 12:28:16 2024 +0200
+
+    Initial commit

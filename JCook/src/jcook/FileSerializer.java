@@ -53,7 +53,7 @@ public class FileSerializer implements ISerializer {
 	@Override
 	public boolean recipeExistsByName(String name) {
 		for (Recipe recipe : recipes) {
-			if (recipe.getName().equals(name)) {
+			if (recipe.getName().equalsIgnoreCase(name)) {
 				return true;
 			}
 		}
@@ -88,7 +88,7 @@ public class FileSerializer implements ISerializer {
 	@Override
 	public boolean deleteRecipeByName(String name) {
 		for (Recipe recipe : recipes) {
-			if (recipe.getName().equals(name)) {
+			if (recipe.getName().equalsIgnoreCase(name)) {
 				recipes.remove(recipe);
 				return true;
 			}
@@ -128,7 +128,7 @@ public class FileSerializer implements ISerializer {
 	public Recipe getRecipeByName(String name) {
 		
 		for (Recipe recipe : recipes) {
-			if (recipe.getName().equals(name)) {
+			if (recipe.getName().equalsIgnoreCase(name)) {
 				return recipe;
 			}
 		}
@@ -168,7 +168,7 @@ public class FileSerializer implements ISerializer {
 	public List<Integer> getRecipesIdByCategory(String category) {
 		List<Integer> recipeIds = new ArrayList<Integer>();
 		for (Recipe recipe : recipes) {
-			if (recipe.getCategory().equals(category))
+			if (recipe.getCategory().equalsIgnoreCase(category))
 				recipeIds.add(recipe.getId());
 		}
 		return recipeIds;
@@ -187,7 +187,7 @@ public class FileSerializer implements ISerializer {
 	public List<Recipe> getRecipesByCategory(String category) {
 		ArrayList<Recipe> tempRecipes = new ArrayList<>();
 		for (Recipe recipe : recipes) {
-			if (recipe.getCategory().equals(category))
+			if (recipe.getCategory().equalsIgnoreCase(category))
 				tempRecipes.add(recipe);
 		}
 		return tempRecipes;

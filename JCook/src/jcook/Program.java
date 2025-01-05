@@ -7,7 +7,7 @@ public class Program {
 		// Load the spring configuration file
 		ClassPathXmlApplicationContext context = 
 				new ClassPathXmlApplicationContext("applicationContext.xml");
-				
+
 		// Create UI bean
 		CommandLineUserInterface ui = context.getBean("commandLineUserInterface", 
 				CommandLineUserInterface.class);

@@ -79,7 +79,7 @@ public class Service {
 		
 		Recipe oldInfo = serializer.getRecipeById(id);
 		
-		if (!newInfo.getName().equals(oldInfo.getName()))
+		if (!newInfo.getName().equalsIgnoreCase(oldInfo.getName()))
 			if (serializer.recipeExistsByName(newInfo.getName()))
 				throw new InvalidRecipeException("New name already exists for a differenct recipe!");
 		
@@ -111,11 +111,11 @@ public class Service {
 	}
 	
 	public boolean isValidCategory(String category) {
-		return category != null && !category.trim().isEmpty();
+		return category != null && !category.trim().replaceAll("[ \n\t]", "").isEmpty();
 	}
 	
 	public boolean isValidDescription(String desc) {
-		return desc != null && !desc.trim().isEmpty() && desc.length() <= maxDescriptionLength;
+		return desc != null && !desc.trim().replaceAll("[ \n\t]", "").isEmpty() && desc.length() <= maxDescriptionLength;
 	}
 	
 	public boolean isValidIngredients(List<String> ingredients) {
