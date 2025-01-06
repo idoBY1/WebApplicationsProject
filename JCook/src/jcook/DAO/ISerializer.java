@@ -1,5 +1,7 @@
-package jcook;
+package jcook.DAO;
 import java.util.List;
+
+import jcook.Recipe;
 
 public interface ISerializer {
 	// Checks if a recipe exists in the DB by its name

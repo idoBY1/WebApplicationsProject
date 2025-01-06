@@ -78,16 +78,15 @@ public class Recipe implements Comparable<Recipe>, Cloneable, Serializable {
 	
 	@Override
 	public boolean equals(Object obj) {
+		if (obj == null)
+			return false;
+		
 		if (!(obj instanceof Recipe))
 			return false;
 		
 		Recipe other = (Recipe)obj;
 		
-		// Doesn't check if the ids and dates are equal because they are not relevant 
-		// to the contents of the recipe
-		return name.equals(other.name) && category.equals(other.category)
-				&& description.equals(other.description) && ingredients.equals(other.ingredients)
-				&& instructions.equals(other.instructions);
+		return id == other.id;
 	}
 	
 	@Override

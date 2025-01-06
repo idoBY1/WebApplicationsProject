@@ -1,4 +1,4 @@
-package jcook;
+package jcook.DAO;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +12,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springframework.stereotype.Component;
+
+import jcook.Recipe;
 
 @Component
 public class FileSerializer implements ISerializer {
