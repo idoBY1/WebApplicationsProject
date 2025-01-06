@@ -38,11 +38,11 @@ public class Service {
 		serializer.saveRecipe(recipe);
 	}
 
-	public Recipe getRecipe(String name) {
+	public Recipe getRecipe(String name) throws NoRecipeException {
 		return serializer.getRecipeByName(name);
 	}
 
-	public Recipe getRecipeClone(String name) throws CloneNotSupportedException {
+	public Recipe getRecipeClone(String name) throws CloneNotSupportedException, NoRecipeException {
 		Recipe r = serializer.getRecipeByName(name);
 
 		if (r == null) {
@@ -52,7 +52,7 @@ public class Service {
 		return r.clone();
 	}
 
-	public Recipe getRecipe(int id) {
+	public Recipe getRecipe(int id) throws NoRecipeException {
 		return serializer.getRecipeById(id);
 	}
 

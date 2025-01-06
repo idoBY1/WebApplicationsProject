@@ -87,6 +87,7 @@ public class FileSerializer implements ISerializer {
 			if (recipe.getName().equalsIgnoreCase(name)) {
 				recipes.remove(recipe);
 				SerializeData(recipes);
+				return;
 			}
 		}
 		
@@ -100,6 +101,7 @@ public class FileSerializer implements ISerializer {
 			if (recipe.getId() == id) {
 				recipes.remove(recipe);
 				SerializeData(recipes);
+				return;
 			}
 		}
 		throw new NoRecipeException("There are no recipes with the id " + id);
@@ -110,31 +112,34 @@ public class FileSerializer implements ISerializer {
 		if(recipes.contains(changedRecipe)) {
 			recipes.set(recipes.indexOf(changedRecipe), changedRecipe);
 			SerializeData(recipes);
+			return;
 		}
 		
 		throw new NoRecipeException("There is no recipe with the id " + changedRecipe.getId());
 	}
 
 	@Override
-	public Recipe getRecipeByName(String name) {
+	public Recipe getRecipeByName(String name) throws NoRecipeException {
 		
 		for (Recipe recipe : recipes) {
 			if (recipe.getName().equalsIgnoreCase(name)) {
 				return recipe;
 			}
 		}
-		return null;
+		
+		throw new NoRecipeException("There is no recipe with this name");
 	}
 
 	@Override
-	public Recipe getRecipeById(int id) {
+	public Recipe getRecipeById(int id) throws NoRecipeException {
 		
 		for (Recipe recipe : recipes) {
 			if (recipe.getId() == id) {
 				return recipe;
 			}
 		}
-		return null;
+		
+		throw new NoRecipeException("There is no recipe with this name");
 	}
 
 	@Override

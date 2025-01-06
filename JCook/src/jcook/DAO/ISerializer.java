@@ -30,10 +30,10 @@ public interface ISerializer {
 	public void editRecipe(Recipe changedRecipe) throws NoRecipeException, IOException;
 	
 	// Retrieve a recipe from the DB. Return null if not found
-	public Recipe getRecipeByName(String name);
+	public Recipe getRecipeByName(String name) throws NoRecipeException;
 	
 	// Retrieve a recipe from the DB. Return null if not found
-	public Recipe getRecipeById(int id);
+	public Recipe getRecipeById(int id) throws NoRecipeException;
 	
 	// Return in a list all of the ids of the recipes currently stored 
 	// in the DB (Return an empty list if the DB doesn't contain any recipe)

@@ -1,5 +1,6 @@
 package jcook;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jcook.Exceptions.InvalidRecipeException;
+import jcook.Exceptions.NoRecipeException;
 
 @Component
 public class CommandLineUserInterface {
@@ -127,12 +129,9 @@ public class CommandLineUserInterface {
 		r.setDateLatestChange(new Date());
 
 		try {
-			if (service.saveRecipe(r)) {
-				System.out.println("Recipe saved successfully");
-			} else {
-				System.out.println("Failed to save recipe");
-			}
-		} catch (InvalidRecipeException e) {
+			service.saveRecipe(r);
+			System.out.println("Recipe saved successfully");
+		} catch (InvalidRecipeException | IOException e) {
 			System.out.println("Failed to save recipe. Errors: ");
 			System.out.println(e.getMessage());
 		}
@@ -163,12 +162,11 @@ public class CommandLineUserInterface {
 
 				Recipe r = service.getRecipe(id);
 
-				if (r != null)
-					printRecipe(r);
-				else
-					System.out.println("Did not found requested recipe");
+				printRecipe(r);					
 			} catch (NumberFormatException e) {
 				System.out.println("Invalid arguments! expected a number after '-i'");
+			} catch (NoRecipeException e) {
+				System.out.println("Did not found requested recipe");
 			}
 		} else if (input[1].equals("-a")) {
 			List<Recipe> recipes = service.getAllRecipes();
@@ -208,12 +206,13 @@ public class CommandLineUserInterface {
 				recipeName += " " + input[i];
 			}
 
-			Recipe r = service.getRecipe(recipeName);
-
-			if (r != null)
+			try {
+				Recipe r = service.getRecipe(recipeName);
+				
 				printRecipe(r);
-			else
+			} catch (NoRecipeException e) {
 				System.out.println("Did not found requested recipe");
+			}
 		}
 	}
 
@@ -239,7 +238,7 @@ public class CommandLineUserInterface {
 		try {
 			service.deleteRecipe(recipeName);
 			System.out.println("Deleted recipe successfully");
-		} catch (InvalidRecipeException e) {
+		} catch (InvalidRecipeException | IOException | NoRecipeException e) {
 			System.out.println("Failed to delete recipe. Error: ");
 			System.out.println(e.getMessage());
 		}
@@ -282,9 +281,7 @@ public class CommandLineUserInterface {
 		} catch (CloneNotSupportedException e) {
 			System.out.println("Failed to clone recipe to edit");
 			return;
-		}
-
-		if (r == null) {
+		} catch (NoRecipeException e) {
 			System.out.println("Recipe doesn't exist!");
 			return;
 		}
@@ -342,7 +339,7 @@ public class CommandLineUserInterface {
 		try {
 			service.editRecipe(r);
 			System.out.println("Updated recipe");
-		} catch (InvalidRecipeException e) {
+		} catch (InvalidRecipeException | IOException | NoRecipeException e) {
 			System.out.println("Failed to edit recipe. \nError: ");
 			System.out.println(e.getMessage());
 		}
