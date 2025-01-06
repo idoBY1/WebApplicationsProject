@@ -1,4 +1,5 @@
 package jcook;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import jcook.DAO.ISerializer;
 import jcook.Exceptions.InvalidRecipeException;
+import jcook.Exceptions.NoRecipeException;
 
 @Component
 @PropertySource("classpath:params.properties")
@@ -27,18 +29,13 @@ public class Service {
 	@Value("${maxInstructionsLen}")
 	private int maxInstructions;
 
-	public boolean saveRecipe(Recipe recipe) throws InvalidRecipeException {
-		if (!validate(recipe))
-		 {
-			return false; // also throws InvalidRecipeException
-		}
+	public void saveRecipe(Recipe recipe) throws InvalidRecipeException, IOException {
+		validate(recipe); // throws InvalidRecipe Exception
 
-		if (serializer.recipeExistsByName(recipe.getName())) {
+		if (serializer.recipeExistsByName(recipe.getName()))
 			throw new InvalidRecipeException("Recipe already exists!\n");
-		}
 
 		serializer.saveRecipe(recipe);
-		return true;
 	}
 
 	public Recipe getRecipe(String name) {
@@ -67,28 +64,19 @@ public class Service {
 		return serializer.getRecipesByCategory(category);
 	}
 
-	public void deleteRecipe(String name) throws InvalidRecipeException {
-		if (serializer.recipeExistsByName(name)) {
-			serializer.deleteRecipeByName(name);
-		} else {
-			throw new InvalidRecipeException("Recipe doesnt exist!");
-		}
+	public void deleteRecipe(String name) throws InvalidRecipeException, NoRecipeException, IOException {
+		serializer.deleteRecipeByName(name);
 	}
 
-	public boolean editRecipe(Recipe newInfo) throws InvalidRecipeException {
+	public void editRecipe(Recipe newInfo) throws InvalidRecipeException, IOException, NoRecipeException {
 		int id = newInfo.getId();
 
-		if (!validate(newInfo))
-		 {
-			return false; // also throws InvalidRecipeException
-		}
-
-		if (!serializer.recipeExistsById(id)) {
-			throw new InvalidRecipeException("Recipe doesnt exist to change!");
-		}
-
+		validate(newInfo); // throws InvalidRecipeException
+		
 		Recipe oldInfo = serializer.getRecipeById(id);
-
+		if (oldInfo == null)
+			throw new NoRecipeException("not an existing recipe!");
+		
 		if (!newInfo.getName().equalsIgnoreCase(oldInfo.getName())) {
 			if (serializer.recipeExistsByName(newInfo.getName())) {
 				throw new InvalidRecipeException("New name already exists for a differenct recipe!");
@@ -96,8 +84,6 @@ public class Service {
 		}
 
 		serializer.editRecipe(newInfo);
-
-		return true;
 	}
 
 
