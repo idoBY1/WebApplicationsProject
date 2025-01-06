@@ -2,8 +2,8 @@ package jcook.DAO;
 import java.io.IOException;
 import java.util.List;
 
-import jcook.NoRecipeException;
 import jcook.Recipe;
+import jcook.Exceptions.NoRecipeException;
 
 public interface ISerializer {
 	// Checks if a recipe exists in the DB by its name

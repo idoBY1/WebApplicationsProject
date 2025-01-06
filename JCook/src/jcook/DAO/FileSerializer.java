@@ -11,8 +11,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
-import jcook.NoRecipeException;
 import jcook.Recipe;
+import jcook.Exceptions.NoRecipeException;
 
 @Component
 public class FileSerializer implements ISerializer {

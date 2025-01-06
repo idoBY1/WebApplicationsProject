@@ -18,6 +18,8 @@ import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import jcook.Exceptions.InvalidRecipeException;
+
 @Component
 public class CommandLineUserInterface {
 	private Map<String, Consumer<String[]>> commandMap = new HashMap<>();
