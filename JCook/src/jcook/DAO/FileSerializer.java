@@ -8,11 +8,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.springframework.stereotype.Component;
+import javax.annotation.PostConstruct;
 
+import jcook.NoRecipeException;
 import jcook.Recipe;
 
 @Component
@@ -22,38 +21,32 @@ public class FileSerializer implements ISerializer {
 	
 	@PostConstruct
 	public void getRecipes() {
+
 		try {
-			FileInputStream fileIn = new FileInputStream("recipes.ser");
-			ObjectInputStream in = new ObjectInputStream(fileIn);
-			recipes = (List<Recipe>) in.readObject();
-//			System.out.println("Deserialized Object: " + recipes);
-			
-			fileIn.close();
-			in.close();
-		} 
-		catch (IOException | ClassNotFoundException e) {
+		FileInputStream fileIn = new FileInputStream("recipes.ser");
+		ObjectInputStream in = new ObjectInputStream(fileIn);
+		recipes = (List<Recipe>) in.readObject();
+		fileIn.close();
+		in.close();
+		} catch (IOException | ClassNotFoundException e) {
 			recipes = new ArrayList<>();
 		}
 	}
 	
-	@PreDestroy
-	public void SerializeData() {
-		try {
-			FileOutputStream fileOut = new FileOutputStream("recipes.ser");
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(recipes);
+	public void SerializeData(List<Recipe> recipes) throws IOException {
+		FileOutputStream fileOut = new FileOutputStream("recipes.ser");
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		out.writeObject(recipes);
 //			System.out.println("Serialized data is saved in recipes.ser");
-			
-			fileOut.close();
-			out.close();
-		} 
-		catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		
+		fileOut.close();
+		out.close();
 	}
 
+	
 	@Override
 	public boolean recipeExistsByName(String name) {
+
 		for (Recipe recipe : recipes) {
 			if (recipe.getName().equalsIgnoreCase(name)) {
 				return true;
@@ -64,6 +57,7 @@ public class FileSerializer implements ISerializer {
 
 	@Override
 	public boolean recipeExistsById(int id) {
+
 		for (Recipe recipe : recipes) {
 			if (recipe.getId() == id) {
 				return true;
@@ -73,57 +67,52 @@ public class FileSerializer implements ISerializer {
 	}
 
 	@Override
-	public boolean saveRecipe(Recipe recipe) {
-		if(!recipeExistsByName(recipe.getName())) {
-			if (recipes.isEmpty())
-				recipe.setId(1);
-			else
-				recipe.setId(recipes.get(recipes.size() - 1).getId() + 1);
-			
-			recipes.add(recipe);
-			return true;
-		}
-			
-		return false;
+	public void saveRecipe(Recipe recipe) throws IOException {
+		
+		if (recipes.isEmpty())
+			recipe.setId(1);
+		else
+			recipe.setId(recipes.get(recipes.size() - 1).getId() + 1);
+		
+		recipes.add(recipe);
+
+		
+		SerializeData(recipes);
 	}
 
 	@Override
-	public boolean deleteRecipeByName(String name) {
+	public void deleteRecipeByName(String name) throws NoRecipeException, IOException {
+		
 		for (Recipe recipe : recipes) {
 			if (recipe.getName().equalsIgnoreCase(name)) {
 				recipes.remove(recipe);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean deleteRecipeById(int id) {
-		for (Recipe recipe : recipes) {
-			if (recipe.getId() == id) {
-				recipes.remove(recipe);
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean editRecipe(Recipe changedRecipe) {
-		for (Recipe recipe : recipes) {
-			if ( recipe.getId() == changedRecipe.getId()) {
-				recipe.setName(changedRecipe.getName());
-				recipe.setCategory(changedRecipe.getCategory());
-				recipe.setDescription(changedRecipe.getDescription());
-				recipe.setIngredients(changedRecipe.getIngredients());
-				recipe.setInstructions(changedRecipe.getInstructions());
-				recipe.setDateLatestChange(changedRecipe.getDateLatestChange());
-				return true;
+				SerializeData(recipes);
 			}
 		}
 		
-		return false;
+		throw new NoRecipeException("There are no recipes with the name " + name);
+	}
+
+	@Override
+	public void deleteRecipeById(int id) throws NoRecipeException, IOException {
+		
+		for (Recipe recipe : recipes) {
+			if (recipe.getId() == id) {
+				recipes.remove(recipe);
+				SerializeData(recipes);
+			}
+		}
+		throw new NoRecipeException("There are no recipes with the id " + id);
+	}
+
+	@Override
+	public void editRecipe(Recipe changedRecipe) throws NoRecipeException, IOException {
+		if(recipes.contains(changedRecipe)) {
+			recipes.set(recipes.indexOf(changedRecipe), changedRecipe);
+			SerializeData(recipes);
+		}
+		
+		throw new NoRecipeException("There is no recipe with the id " + changedRecipe.getId());
 	}
 
 	@Override

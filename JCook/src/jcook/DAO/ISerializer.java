@@ -1,6 +1,8 @@
 package jcook.DAO;
+import java.io.IOException;
 import java.util.List;
 
+import jcook.NoRecipeException;
 import jcook.Recipe;
 
 public interface ISerializer {
@@ -12,20 +14,20 @@ public interface ISerializer {
 	
 	// Save a recipe to the DB. Do nothing if name already exists.
 	// Return true if added successfully and false if not added
-	public boolean saveRecipe(Recipe recipe);
+	public void saveRecipe(Recipe recipe) throws IOException;
 	
 	// Delete a recipe from the DB. Return true if deleted successfully 
 	// and false if not (if name doesn't exist, do nothing and return false)
-	public boolean deleteRecipeByName(String name);
+	public void deleteRecipeByName(String name) throws NoRecipeException, IOException;
 	
 	// Delete a recipe from the DB. Return true if deleted successfully 
 	// and false if not (if id doesn't exist, do nothing and return false)
-	public boolean deleteRecipeById(int id);
+	public void deleteRecipeById(int id) throws NoRecipeException, IOException;
 	
 	// Receives a recipe and changes the recipe in the DB with the same id
 	// to be equal to the received recipe. Return true if changed successfully 
 	// and false if not (if id doesn't exist in the DB, do nothing and return false)
-	public boolean editRecipe(Recipe changedRecipe);
+	public void editRecipe(Recipe changedRecipe) throws NoRecipeException, IOException;
 	
 	// Retrieve a recipe from the DB. Return null if not found
 	public Recipe getRecipeByName(String name);
